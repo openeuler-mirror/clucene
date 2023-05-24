@@ -1,6 +1,6 @@
 Name:            clucene
 Version:         2.3.3.4
-Release:         35
+Release:         36
 Summary:         CLucene is a C++ port of Lucene
 License:         LGPLv2+ or ASL 2.0
 URL:             http://www.sourceforge.net/projects/clucene
@@ -48,6 +48,9 @@ rm -rfv src/ext/{boost/,zlib/}
 
 
 %build
+%if "%toolchain" == "clang"
+  CXXFLAGS="$CXXFLAGS -Wno-error=c++11-narrowing"
+%endif
 mkdir %{_target_platform}
 cd %{_target_platform}
 %{cmake} \
@@ -97,5 +100,8 @@ time make -C %{_target_platform} test ARGS="--timeout 300 --output-on-failure" |
 
 
 %changelog
+* Fri Apr 21 2023 jammyjellyfish <jammyjellyfish255@outlook.com> - 2.3.3.4-36
+- Fix clang build error
+
 * Sun Dec 1 2019 wangzhishun <wangzhishun1@huawei.com> - 2.3.3.4-35
 - Package init
